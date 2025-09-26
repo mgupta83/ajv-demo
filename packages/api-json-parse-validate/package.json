@@ -5,8 +5,9 @@
   "license": "MIT",
   "description": "",
   "type": "module",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "exports": {
+    ".": "./dist/src/index.js"
+  },
   "scripts": {
     "build": "tsc --build",
     "clean": "rimraf dist node_modules tsconfig.tsbuildinfo && tsc --build --clean",
@@ -16,7 +17,7 @@
     "test:unit": "vitest run"
   },
   "keywords": [],
-  "peerDependencies": {
-    "@cellix/json-parse-validate-ajv": "^1.0.0"
+  "dependencies": {
+    "@cellix/json-parse-validate-ajv": "*"
   }
 }

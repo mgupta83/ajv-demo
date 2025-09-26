@@ -1,7 +1,5 @@
-
 import type { JSONSchemaType } from "@cellix/json-parse-validate-ajv";
 import { buildParser } from "@cellix/json-parse-validate-ajv";
-
 
 interface User {
     name: string;

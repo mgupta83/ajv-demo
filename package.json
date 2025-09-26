@@ -17,6 +17,7 @@
     "test:unit": "npm run test:unit --ws --if-present"
   },
   "devDependencies": {
+    "@types/node": "^24.5.2",
     "concurrently": "^9.2.1",
     "rimraf": "^6.0.1",
     "typescript": "^5.9.2",
