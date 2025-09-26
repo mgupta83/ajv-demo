@@ -25,6 +25,7 @@
   },
   "workspaces": [
     "packages/cellix-json-parse-validate-ajv",
-    "packages/api-json-parse-validate"
+    "packages/api-json-parse-validate",
+    "packages/cellix-ajv-custom-formats-plugin"
   ]
 }

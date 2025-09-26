@@ -1,0 +1,14 @@
+{
+	"extends": [
+		"../../tsconfig.base"
+	],
+	"compilerOptions": {
+		"exactOptionalPropertyTypes": false, //needed to comment out for a handful of @opentelemetry packages
+		/* Modules */
+		"rootDir": ".",
+
+		/* Emit */
+		"outDir": "dist"
+	},
+	"include": ["src/**/*.ts"]
+}

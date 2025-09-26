@@ -16,13 +16,13 @@ const userSchema: JSONSchemaType<User> = {
     type: "object",
     properties: {
         name: { type: "string", errorMessage: "Name must be a string." },
-        id: { type: "string", errorMessage: "ID must be a string." },
+        id: { type: "string", pattern: "/^\\d{8}$/", format: "luhn", errorMessage: { pattern: "ID must be 8 digits.", format: "ID must pass Luhn check." } },
         data: {
             type: "object",
             properties: {
                 age: { type: "integer", minimum: 0, errorMessage: { type: "Age must be an integer.", minimum: "Age must be at least 0." } },
                 email: { type: "string", format: "email", errorMessage: { format: "Email must be valid." } },
-                country: { type: "string", errorMessage: "Country must be a string." }
+                country: { type: "string", pattern: "/^[A-Z]{3}$/",  format: "iso-country-code", errorMessage: { pattern: "Country must be a 3 character code.", format: "Country must be a valid ISO 3166-1 code." } }
             },
             required: ["age", "email", "country"],
             additionalProperties: false,

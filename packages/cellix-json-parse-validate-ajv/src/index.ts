@@ -2,6 +2,7 @@ import Ajv from "ajv";
 import type { JSONSchemaType, ValidateFunction } from "ajv";
 import AjvErrors from "ajv-errors";
 import AjvFormats from "ajv-formats";
+import { addCustomFormats } from "@cellix/ajv-custom-formats-plugin";
 
 export type { JSONSchemaType };
 
@@ -12,6 +13,9 @@ AjvErrors(ajv);
 
 //@ts-ignore
 AjvFormats(ajv);
+
+// Register custom formats
+addCustomFormats(ajv);
 
 
 // Generic function to build a validator for any type T
