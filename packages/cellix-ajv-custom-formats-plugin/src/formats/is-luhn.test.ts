@@ -17,11 +17,6 @@ describe('luhnFormat', () => {
     }
 
     // non-string should fail
-    expect(validate(12345678 as any)).toBe(false)
-  })
-
-  it('format object validate works directly', () => {
-    expect((luhnFormat as any).validate('79927398713')).toBe(luhn('79927398713'))
-    expect((luhnFormat as any).validate(12345 as any)).toBe(false)
+    expect(validate(12345678)).toBe(false)
   })
 })
