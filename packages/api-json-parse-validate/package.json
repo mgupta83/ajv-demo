@@ -1,0 +1,22 @@
+{
+  "name": "@demo/api-json-parse-validate",
+  "version": "1.0.0",
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rimraf dist node_modules tsconfig.tsbuildinfo && tsc --build --clean",
+    "test": "vitest run",
+    "test:all": "npm run test",
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run"
+  },
+  "keywords": [],
+  "peerDependencies": {
+    "@cellix/json-parse-validate-ajv": "^1.0.0"
+  }
+}

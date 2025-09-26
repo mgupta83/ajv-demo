@@ -1,0 +1,29 @@
+{
+  "name": "ajv-demo",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "author": "CellixJS",
+  "license": "MIT",
+  "main": "packages/api/dist/src/index.js",
+  "scripts": {
+    "start": "npm run build && concurrently npm:start:* --kill-others-on-fail --workspace=@ocom/api",
+    "build": "npm run build --ws --if-present",
+    "tsbuild": "tsc --build",
+    "clean": "npm install && npm run clean --ws --if-present && rimraf dist node_modules package-lock.json **/coverage",
+    "test": "npm run test --ws --if-present",
+    "test:all": "npm run test:all --ws --if-present",
+    "test:coverage": "npm run test:coverage --ws --if-present",
+    "test:unit": "npm run test:unit --ws --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "workspaces": [
+    "packages/cellix-json-parse-validate-ajv",
+    "packages/api-json-parse-validate"
+  ]
+}

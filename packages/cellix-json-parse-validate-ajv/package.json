@@ -1,0 +1,24 @@
+{
+  "name": "@cellix/json-parse-validate-ajv",
+	"version": "1.0.0",
+	"author": "",
+	"license": "MIT",
+	"description": "",
+	"type": "module",
+	"main": "dist/src/index.js",
+	"types": "dist/src/index.d.ts",
+  "scripts": {
+		"build": "tsc --build",
+		"clean": "rimraf dist node_modules tsconfig.tsbuildinfo && tsc --build --clean",
+		"test": "vitest run",
+		"test:all": "npm run test",
+		"test:coverage": "vitest run --coverage",
+		"test:unit": "vitest run"
+	},
+  "keywords": [],
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-errors": "^3.0.0",
+    "ajv-formats": "^3.0.1"
+  }
+}
