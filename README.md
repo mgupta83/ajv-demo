@@ -31,90 +31,120 @@ Build all workspace packages (TypeScript project references are used by each pac
 ```bash
 npm run build
 ```
+# ajv-demo
+
+Minimal TypeScript monorepo demonstrating AJV-based JSON parsing and validation with custom formats and good test coverage.
+
+This repository contains a small, practical example of how to:
+
+- Build a reusable AJV-based parser utility that returns typed data or throws detailed validation errors.
+- Author and register custom AJV formats (Luhn check, ISO country codes) in a separate plugin package.
+- Consume the parser utility from an example package inside the same npm workspace.
+
+Repository layout
+
+- `packages/cellix-json-parse-validate-ajv` — the reusable parse+validate utility. Exports `buildParser<T>(schema)`.
+- `packages/cellix-ajv-custom-formats-plugin` — registers custom formats (`luhn`, `iso-country-code`) with Ajv.
+- `packages/api-json-parse-validate` — example consumer that defines a `User` schema and uses the parser.
+
+Quickstart
+
+Prerequisites
+
+- Node.js 18+ and npm
+
+Install
+
+```bash
+npm install
+```
+
+Build
+
+Build all workspace packages (TypeScript project references may be used by packages):
+
+```bash
+npm run build
+```
 
 Build a single package (example):
 
 ```bash
-npm -w @cellix/json-parse-validate-ajv run build
-npm -w @demo/api-json-parse-validate run build
+npm -w ./packages/cellix-json-parse-validate-ajv run build
+npm -w ./packages/api-json-parse-validate run build
 ```
 
 Run tests
 
-Each package exposes `test` scripts using Vitest. Run all package tests from the repo root:
+Run all tests for the monorepo:
 
 ```bash
-npm run test
+npm test
 ```
 
-Or run a single package's tests:
+Run a single package's tests:
 
 ```bash
-npm -w @cellix/json-parse-validate-ajv test
-npm -w @demo/api-json-parse-validate test
+npm -w ./packages/cellix-ajv-custom-formats-plugin test
+npm -w ./packages/cellix-json-parse-validate-ajv test
+npm -w ./packages/api-json-parse-validate test
 ```
 
-The repository includes example unit tests that assert:
-- The utility correctly returns typed data for valid input.
-- Validation failures throw an Error that contains the configured AJV error messages (including custom messages provided via `errorMessage`, ajv-formats messages, and additionalProperties messages).
+What the tests cover
+
+- The parser utility (`buildParser`) compiles provided JSON Schemas and returns a validator function that returns typed data or throws an Error containing AJV's aggregated error text.
+- Custom formats (Luhn, ISO country codes) are registered and tested by comparing AJV results to the authoritative libraries (`fast-luhn`, `i18n-iso-countries`).
 
 Usage example
 
-The utility exports `buildParser<T>(schema)`.
-
-Example using the `User` schema in `packages/api-json-parse-validate/src/user.ts`:
+The parser utility exports `buildParser<T>(schema)`. Example usage (see `packages/api-json-parse-validate/src/user.ts` for the full example):
 
 ```ts
 import { buildParser } from '@cellix/json-parse-validate-ajv'
 
 type User = {
-	name: string
-	id: string
-	data: { age: number; email: string; country: string }
-	roles: string[]
+  name: string
+  id: string
+  data: { age: number; email: string; country: string }
+  roles: string[]
 }
 
+// assume userSchema is defined in the consumer package
 const parseUser = buildParser<User>(userSchema)
 
-// parseUser returns the typed User on success or throws an Error on failure
 try {
-	const user = parseUser({ name: 'A', id: '1', data: { age: 30, email: 'a@b.com', country: 'US' }, roles: ['admin'] })
-	console.log('valid user', user)
+  const user = parseUser({ name: 'A', id: '00000000', data: { age: 30, email: 'a@b.com', country: 'USA' }, roles: ['admin'] })
+  console.log('valid user', user)
 } catch (err) {
-	console.error('validation failed', err?.message)
+  console.error('validation failed', err?.message)
 }
 ```
 
-Notes & design choices
+Design notes
 
-- AJV: We use `ajv`, `ajv-formats` (for format validation like `email`) and `ajv-errors` to support human-friendly error messages via the `errorMessage` keyword.
-- API: `buildParser` compiles the provided JSON Schema and returns a function which accepts `unknown` data. On success it returns the data typed as `T`. On failure it throws an `Error` whose message starts with `Validation failed:` followed by AJV's aggregated error text.
-- Peer dependency: In this demo the consumer package lists the utility as a `peerDependency` to show how it would behave when published as a library. In this workspace the packages are linked automatically by npm workspaces during `npm install`.
+- AJV + ajv-formats + ajv-errors are used to provide expressive, localized validation and human-friendly error messages via the `errorMessage` keyword.
+- `buildParser` compiles a JSON Schema and returns a function that either returns typed data or throws an `Error` with `Validation failed:` + AJV error text.
+- `addCustomFormats(ajv)` registers `luhn` and `iso-country-code` formats so consumers can reference them directly in schemas.
 
 Developer tips
 
-- TypeScript: each package uses `tsc --build` and may contain project references if you expand the repo. Keep `types` and `main` fields in packages pointing to `dist/` outputs.
-- Tests: vitest is used for fast unit tests and coverage. The base vitest config is `vitest.base.config.ts` at the repo root and packages extend it.
+- Running TypeScript builds: `npm run build` (workspace aware) or `npm -w ./packages/<pkg> run build` for a single package.
+- Tests use Vitest. Extend or adjust vitest config at the package level if needed.
 
-Publishing
+CI and publishing
 
-If you want to publish the packages to npm:
-
-1. Update `package.json` fields (`name`, `version`, `repository`, `author`, etc.).
-2. Decide whether to keep the consumer package's dependency on the utility as `peerDependency` (recommended for libraries) or a normal `dependency` (for applications).
-3. Build and publish the utility first, then the consumer.
+- Add a CI workflow (GitHub Actions) to run `npm ci && npm test` on push/pull requests.
+- If publishing packages to npm, build and publish `cellix-json-parse-validate-ajv` first, then the consumer package.
 
 Contributing
 
-PRs welcome. Suggested small improvements:
-- Add a minimal runtime example (CLI or tiny Express server) demonstrating runtime validation.
-- Add type-level tests or API docs.
-- Add GitHub Actions workflow to run tests on push.
+PRs welcome. Ideas:
+- Add a small runtime example (CLI or server) to exercise the parser.
+- Add more custom formats/keywords and their tests.
+- Add CI coverage reporting.
 
 License
 
 MIT
 
-Contact
-
-Maintainer: CellixJS / mgupta83
+Maintainer: mgupta83
