@@ -47,6 +47,20 @@ Repository layout
 - `packages/cellix-ajv-custom-formats-plugin` — registers custom formats (`luhn`, `iso-country-code`) with Ajv.
 - `packages/api-json-parse-validate` — example consumer that defines a `User` schema and uses the parser.
 
+Package dependency graph
+
+```mermaid
+graph LR
+  A[packages/api-json-parse-validate]
+  B[packages/cellix-json-parse-validate-ajv]
+  C[packages/cellix-ajv-custom-formats-plugin]
+
+  A --> B
+  B --> C
+```
+
+The diagram above shows the dependency direction: the API consumer depends on the parser utility, and the parser utility imports/registers formats from the formats plugin.
+
 Quickstart
 
 Prerequisites
