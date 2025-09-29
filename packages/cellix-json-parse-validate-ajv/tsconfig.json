@@ -10,5 +10,10 @@
 		/* Emit */
 		"outDir": "dist"
 	},
-	"include": ["src/**/*.ts"]
+	"include": ["src/**/*.ts"],
+	"references": [
+		{
+			"path": "../cellix-ajv-custom-formats-plugin"
+		}
+	]
 }
