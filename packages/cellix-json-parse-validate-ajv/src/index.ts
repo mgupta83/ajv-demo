@@ -7,12 +7,8 @@ import { addCustomFormats } from "@cellix/ajv-custom-formats-plugin";
 export type { JSONSchemaType };
 
 const ajv = new Ajv.Ajv({ allErrors: true });
-
-//@ts-ignore
-AjvErrors(ajv);
-
-//@ts-ignore
-AjvFormats(ajv);
+AjvErrors.default(ajv);
+AjvFormats.default(ajv);
 
 // Register custom formats
 addCustomFormats(ajv);
@@ -22,7 +18,7 @@ addCustomFormats(ajv);
 export function buildParser<T>(schema: JSONSchemaType<T>) {
   const validate: ValidateFunction<T> = ajv.compile(schema);
 
-  return (data: unknown): T => {
+  return (data: {[key: string]: unknown}): T => {
     if (validate(data)) {
       return data; // ✅ Now strongly typed as T
     }
